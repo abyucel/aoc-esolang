@@ -1,0 +1,11 @@
+129a130,132
+>         # Options.
+>         self.opts = dict()
+> 
+133,136c136
+<         self._namespace = { 'tproc': self }
+< 
+<         # Options.
+<         self.opts = dict()
+---
+>         self._namespace = { 'tproc': self, 'opts': self.opts }

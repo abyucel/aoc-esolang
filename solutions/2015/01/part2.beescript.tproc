@@ -1,0 +1,60 @@
+@
+generator_type = type(i for i in [])
+def ungen(v): return "".join([x.content for x in v]) if isinstance(v, generator_type) else v
+def gen(v): return (tproc.LiteralToken(str(x)) for x in [v]) if not isinstance(v, tproc.LiteralToken) else v
+
+def push(v):
+    v = int(ungen(v))
+    if v == 0:
+        yield "AVIATE 0\nBEE\nBARRY"
+    elif v == 1:
+        yield "AVIATE 59\nAVIATE 13\nBARRY"
+    elif v == -1:
+        yield "AVIATE 13\nAVIATE 59\nBARRY"
+    elif v > 0:
+        yield from push(0)
+        yield "\n"
+        for i in range(v):
+            yield from push(-1)
+            yield "\n"
+            yield "BARRY"
+            if i < v - 1: yield "\n"
+    elif v < 0:
+        yield from push(0)
+        yield "\n"
+        for i in range(v):
+            yield from push(1)
+            yield "\n"
+            yield "BARRY"
+            if i < v - 1: yield "\n"
+
+def sub(v):
+    yield from push(v)
+    yield "\n"
+    yield "BARRY"
+
+def add(v):
+    v = int(ungen(v))
+    yield from push(v * -1)
+    yield "\n"
+    yield "BARRY"
+
+@main
+{push::0}
+BEE
+YELLOW
+{sub::40}
+FLY 179
+{add::1}
+{push::1}
+FLY 183
+{sub::1}
+ROTATE
+{add::1}
+ROTAT
+BEE
+{add::1}
+FLY 5
+{add::1}
+FLY 0
+STK
